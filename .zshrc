@@ -102,6 +102,7 @@ EDITOR="vim"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias aliases="als"
 alias time="/usr/bin/time"
+alias emacs="open -a Emacs"
 
 # ZSH SYNTAX HIGHLIGHT
 typeset -A ZSH_HIGHLIGHT_STYLES
