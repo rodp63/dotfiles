@@ -209,7 +209,7 @@
   :ensure t
   :functions (csv-header-line)
   :hook((csv-mode . csv-header-line)
-	(csv-header-line . csv-align-mode)))
+	(csv-mode . csv-align-mode)))
 
 ;; Major mode ipython
 (use-package ein
