@@ -42,7 +42,10 @@
 (set-default-coding-systems 'utf-8)
 
 ;; Font
-(set-face-attribute 'default nil :height 160)
+(set-face-attribute 'default nil :height 150)
+
+;; Line spacing
+(setq-default line-spacing 1)
 
 ;; ;; Maximize
 ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
@@ -66,7 +69,7 @@
 ;; (load-theme 'doom-challenger-deep t)
 ;; (load-theme 'doom-dark+ t)
 ;; (load-theme 'doom-dracula t)
-;; (load-theme 'doom-palenight
+;; (load-theme 'doom-palenight t)
 (load-theme 'doom-tomorrow-night t)
 
 ;; Vertical lines
@@ -75,6 +78,14 @@
 ;; Better parem mode (after theme)
 (set-face-attribute 'show-paren-match nil :background "yellow" :foreground "black")
 
+;; Nyan bar
+(use-package nyan-mode
+  :functions nyan-mode
+  :config
+  (setq-default nyan-animate-nyancat t
+		nyan-wavy-trail t
+		nyan-bar-length 24)
+  (nyan-mode t))
 
 ;; ===================================================================
 ;; ========================= Custom packages =========================
@@ -95,19 +106,24 @@
 (use-package treemacs
   :ensure t
   :defer t
+  :functions (treemacs-follow-mode)
   :bind
-  ("C-x p" . treemacs-add-and-display-current-project-exclusively))
+  ("C-x p" . treemacs-add-and-display-current-project-exclusively)
+  :config
+  (treemacs-follow-mode -1))
 
 ;; Dired icons
 (use-package treemacs-icons-dired
   :ensure t
   :functions treemacs-icons-dired-mode
   :config
-  (treemacs-icons-dired-mode))
+  (treemacs-icons-dired-mode)
+  (setq-default treemacs-width 30))
 
 ;; Lsp mode
 ;; Install the engines via npm
 (use-package lsp-mode
+  :defines lsp-file-watch-ignored-directories
   :init
   (setq-default lsp-keymap-prefix "C-c p")
   :hook (((python-mode
@@ -119,7 +135,15 @@
   :commands (lsp lsp-deferred)
   :custom
   (lsp-headerline-breadcrumb-enable-diagnostics nil)
-  (lsp-file-watch-threshold 10000))
+  (lsp-file-watch-threshold 4000)
+  :config
+  (dolist (dir '("[/\\\\]\\.mypy_cache\\'"
+                 "[/\\\\]\\.pytest_cache\\'"
+                 "[/\\\\]\\.cache\\'"
+                 "[/\\\\]\\.clwb\\'"
+                 "[/\\\\]__pycache__\\'"
+                 "[/\\\\]venv\\'"))
+    (push dir lsp-file-watch-ignored-directories)))
 
 ;; Lsp UI
 (use-package lsp-ui
@@ -231,6 +255,10 @@
 (use-package crontab-mode
   :ensure t)
 
+;; Major mode for pip-requiriments
+(use-package pip-requirements
+  :ensure t)
+
 ;; Games
 (use-package 2048-game)
 
@@ -248,6 +276,9 @@
 ;;   :custom
 ;;   (python-shell-interpreter "python3")
 ;;   :hook (python-mode . lsp-deferred))
+
+;; HTML indentation
+(setq-default sgml-basic-offset 4)
 
 
 ;; =================================================================
@@ -282,7 +313,18 @@
 ;; Garbage collector
 (setq gc-cons-threshold (* 50 1000 1000))
 
+;; Disable clipboard
+(setq select-enable-clipboard t)
+(setq select-enable-primary nil)
+
 ;; Custom functions
+(defun delete-backward-word ()
+  "Delete backward word without yanking."
+  (interactive)
+  (push-mark)
+  (backward-word)
+  (delete-region (point) (mark)))
+
 (defun select-current-word ()
   "Select current word."
   (interactive)
@@ -317,7 +359,17 @@
 (global-set-key (kbd "s-r") 'revert-buffer) ;; revert-buffer
 (global-set-key (kbd "C-c w") 'select-current-word) ;; select-word
 (global-set-key (kbd "C-c l") 'select-current-line) ;; select-line
-(global-set-key (kbd "C-c d") 'duplicate-current-line) ;; duplicate-line
+(global-set-key (kbd "C-c u") 'duplicate-current-line) ;; duplicate-line
+(global-set-key (kbd "C-c d") 'kill-whole-line) ;; kill-line
+(global-set-key (kbd "M-DEL") 'delete-backward-word) ;; delete-backward-word
+;; Navigation
+(global-set-key (kbd "C-c f r") 'lsp-find-references)
+(global-set-key (kbd "C-c f d") 'lsp-find-definition)
+;; Swap forward and backward functions
+(global-set-key (kbd "C-f") 'forward-word)
+(global-set-key (kbd "M-f") 'forward-char)
+(global-set-key (kbd "C-b") 'backward-word)
+(global-set-key (kbd "M-b") 'backward-char)
 ;; Window size
 (global-set-key (kbd "M-s-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "M-s-<right>") 'enlarge-window-horizontally)
