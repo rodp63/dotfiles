@@ -121,7 +121,7 @@
   (setq-default treemacs-width 30))
 
 ;; Lsp mode
-;; Install the engines via npm
+;; Install the engines via npm!
 (use-package lsp-mode
   :defines lsp-file-watch-ignored-directories
   :init
@@ -136,6 +136,7 @@
   :custom
   (lsp-headerline-breadcrumb-enable-diagnostics nil)
   (lsp-file-watch-threshold 4000)
+  (lsp-log-io nil)
   :config
   (dolist (dir '("[/\\\\]\\.mypy_cache\\'"
                  "[/\\\\]\\.pytest_cache\\'"
@@ -155,6 +156,9 @@
   (lsp-ui-doc-show-with-cursor nil)
   (lsp-ui-doc-show-with-mouse nil)
   (lsp-ui-sideline-enable nil))
+
+;; Ignore case in completion
+(setq completion-ignore-case t)
 
 ;; Lsp treemacs
 (use-package lsp-treemacs
@@ -307,11 +311,11 @@
 (setq create-lockfiles nil)
 (setq backup-directory-alist `(("." . "~/.emacs.d/saves")))
 
-;; Ignore case in completion
-(setq read-buffer-completion-ignore-case t)
-
 ;; Garbage collector
-(setq gc-cons-threshold (* 50 1000 1000))
+(setq gc-cons-threshold (* 100 1024 1024))
+
+;; Amount of data which Emacs reads from the process
+(setq read-process-output-max (* 1024 1024))
 
 ;; Disable clipboard
 (setq select-enable-clipboard t)
