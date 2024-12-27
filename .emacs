@@ -45,7 +45,7 @@
 (set-face-attribute 'default nil :height 150)
 
 ;; Line spacing
-(setq-default line-spacing 1)
+(setq-default line-spacing 2)
 
 ;; ;; Maximize
 ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
@@ -94,6 +94,12 @@
 ;; Asdf
 (add-to-list 'exec-path "~/.asdf/shims/")
 (add-to-list 'exec-path "/opt/homebrew/opt/asdf/libexec/bin/")
+
+;; Ag
+(use-package ag
+  :config
+  (setq-default ag-highlight-search t)
+  (setq-default ag-reuse-buffers 't))
 
 ;; Setup evil
 (use-package evil
@@ -263,6 +269,10 @@
 (use-package pip-requirements
   :ensure t)
 
+;; Major mode for dotenv files
+(use-package dotenv-mode
+  :ensure t)
+
 ;; Games
 (use-package 2048-game)
 
@@ -283,6 +293,9 @@
 
 ;; HTML indentation
 (setq-default sgml-basic-offset 4)
+
+(use-package jinja2-mode
+  :ensure t)
 
 
 ;; =================================================================
