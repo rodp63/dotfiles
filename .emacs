@@ -137,7 +137,7 @@
 	   css-mode
 	   js-mode
 	   c++-mode) . lsp)
-         (lsp-modr . lsp-enable-which-key-integration))
+         (lsp-mode. lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
   :custom
   (lsp-headerline-breadcrumb-enable-diagnostics nil)
@@ -149,7 +149,9 @@
                  "[/\\\\]\\.cache\\'"
                  "[/\\\\]\\.clwb\\'"
                  "[/\\\\]__pycache__\\'"
-                 "[/\\\\]venv\\'"))
+                 "[/\\\\].env\\'"
+                 "[/\\\\]venv\\'"
+                 "[/\\\\]build\\'"))
     (push dir lsp-file-watch-ignored-directories)))
 
 ;; Lsp UI
@@ -273,6 +275,14 @@
 (use-package dotenv-mode
   :ensure t)
 
+;; Major mode for Hashicorp (packer)
+(use-package hcl-mode
+  :ensure t)
+
+;; Major mode for Terraform
+(use-package terraform-mode
+  :ensure t)
+
 ;; Games
 (use-package 2048-game)
 
@@ -296,6 +306,9 @@
 
 (use-package jinja2-mode
   :ensure t)
+
+;; C indentation
+(setq-default c-basic-offset 4)
 
 
 ;; =================================================================

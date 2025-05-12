@@ -103,6 +103,9 @@ EDITOR="vim"
 alias aliases="als"
 alias time="/usr/bin/time"
 alias emacs="open -a Emacs"
+alias qdbtar="tar --zstd -xvf"
+alias yd="ydiff -u"
+alias dsclean="find . -type f -name \"*.DS_Store\" -delete"
 
 # ZSH SYNTAX HIGHLIGHT
 typeset -A ZSH_HIGHLIGHT_STYLES
