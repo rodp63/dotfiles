@@ -290,10 +290,21 @@
 ;; ========================= Langs config =========================
 ;; ================================================================
 
+;; lsp
 (use-package lsp-pyright
   :ensure t
   :hook (python-mode . (lambda () (require 'lsp-pyright) (lsp-deferred)))
   :init (setq-default lsp-pyright-python-executable-cmd "python3"))
+
+;; pyvenv
+(use-package pyvenv
+  :ensure t
+  :config
+  (setq-default pyvenv-mode-line-indicator
+		'(pyvenv-virtual-env-name ("[venv] "))))
+
+(setq-default pyvenv-mode 1)
+
 
 ;; (use-package python-mode
 ;;   :ensure t
