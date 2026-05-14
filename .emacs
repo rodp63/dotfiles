@@ -275,12 +275,20 @@
 (use-package dotenv-mode
   :ensure t)
 
+;; Major mode for JS
+(use-package typescript-mode
+  :ensure t)
+
 ;; Major mode for Hashicorp (packer)
 (use-package hcl-mode
   :ensure t)
 
 ;; Major mode for Terraform
 (use-package terraform-mode
+  :ensure t)
+
+;; Major mode for systemd units
+(use-package systemd
   :ensure t)
 
 ;; Games
