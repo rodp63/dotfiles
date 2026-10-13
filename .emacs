@@ -4,9 +4,9 @@
 
 
 ;; Repositories
-(setq-default package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
-				 ("melpa" . "https://melpa.org/packages/")
-				 ("gnu" . "http://elpa.gnu.org/packages/")))
+(setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
+			 ("melpa" . "https://melpa.org/packages/")
+			 ("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
 ;; Use-package
@@ -15,6 +15,7 @@
 
 (eval-when-compile
   (require 'use-package))
+
 (setq use-package-always-ensure t)
 
 
@@ -91,10 +92,6 @@
 ;; ========================= Custom packages =========================
 ;; ===================================================================
 
-;; Asdf
-(add-to-list 'exec-path "~/.asdf/shims/")
-(add-to-list 'exec-path "/opt/homebrew/opt/asdf/libexec/bin/")
-
 ;; Ag
 (use-package ag
   :config
@@ -126,51 +123,8 @@
   (treemacs-icons-dired-mode)
   (setq-default treemacs-width 30))
 
-;; Lsp mode
-;; Install the engines via npm!
-(use-package lsp-mode
-  :defines lsp-file-watch-ignored-directories
-  :init
-  (setq-default lsp-keymap-prefix "C-c p")
-  :hook (((python-mode
-	   html-mode
-	   css-mode
-	   js-mode
-	   c++-mode) . lsp)
-         (lsp-mode. lsp-enable-which-key-integration))
-  :commands (lsp lsp-deferred)
-  :custom
-  (lsp-headerline-breadcrumb-enable-diagnostics nil)
-  (lsp-file-watch-threshold 4000)
-  (lsp-log-io nil)
-  :config
-  (dolist (dir '("[/\\\\]\\.mypy_cache\\'"
-                 "[/\\\\]\\.pytest_cache\\'"
-                 "[/\\\\]\\.cache\\'"
-                 "[/\\\\]\\.clwb\\'"
-                 "[/\\\\]__pycache__\\'"
-                 "[/\\\\].env\\'"
-                 "[/\\\\]venv\\'"
-                 "[/\\\\]build\\'"))
-    (push dir lsp-file-watch-ignored-directories)))
-
-;; Lsp UI
-(use-package lsp-ui
-  :hook (lsp-mode . lsp-ui-mode)
-  :bind (("s-i" . lsp-ui-doc-glance))
-  :custom
-  (lsp-ui-doc-position 'top)
-  (lsp-ui-doc-delay 0)
-  (lsp-ui-doc-show-with-cursor nil)
-  (lsp-ui-doc-show-with-mouse nil)
-  (lsp-ui-sideline-enable nil))
-
 ;; Ignore case in completion
 (setq completion-ignore-case t)
-
-;; Lsp treemacs
-(use-package lsp-treemacs
-  :after lsp)
 
 ;; Company autocomplete
 (use-package company
@@ -212,12 +166,6 @@
   :config
   (drag-stuff-define-keys))
 
-;; Flycheck
-(use-package flycheck
-  :ensure t
-  :functions global-flycheck-mode
-  :init (global-flycheck-mode))
-
 ;; Colorful delimiters (for elisp only)
 (use-package rainbow-delimiters
   :hook (emacs-lisp-mode . rainbow-delimiters-mode))
@@ -239,6 +187,19 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-key] . helpful-key)
   ("C-h z" . helpful-at-point))
+
+;; Doc helpers
+(use-package eldoc-box
+  :ensure t
+  :custom-face
+  (eldoc-box-body
+   ((t (:family "Helvetica Neue"
+        :height 1.1
+        :background "#282c34"
+        :foreground "#bbc2cf"))))
+  (eldoc-box-border
+   ((t (:background "#61afef")))))
+;; :hook (eglot-managed-mode . eldoc-box-hover-mode))
 
 ;; Major mode CSV
 (use-package csv-mode
@@ -291,6 +252,18 @@
 (use-package systemd
   :ensure t)
 
+;; Major go mode
+(use-package go-mode
+  :ensure t)
+
+;; Markdown mode
+(use-package markdown-mode
+  :ensure t)
+
+;; Jinja 2 mode
+(use-package jinja2-mode
+  :ensure t)
+
 ;; Games
 (use-package 2048-game)
 
@@ -298,11 +271,25 @@
 ;; ========================= Langs config =========================
 ;; ================================================================
 
-;; lsp
-(use-package lsp-pyright
-  :ensure t
-  :hook (python-mode . (lambda () (require 'lsp-pyright) (lsp-deferred)))
-  :init (setq-default lsp-pyright-python-executable-cmd "python3"))
+;; Tree-sitter: grammar sources
+;; Install them with: M-x treesit-install-language-grammar <lang>
+(dolist (grammar
+         '((python "https://github.com/tree-sitter/tree-sitter-python")
+           (go "https://github.com/tree-sitter/tree-sitter-go")))
+  (add-to-list 'treesit-language-source-alist grammar))
+
+;; Prefer Tree-sitter modes over their traditional counterparts
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+(add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode))
+
+;; eglot
+(use-package eglot
+  :ensure nil
+  :hook ((python-ts-mode . eglot-ensure)
+         (go-ts-mode . eglot-ensure))
+  :config
+  (setq eglot-autoshutdown t
+        eglot-events-buffer-size 0))
 
 ;; pyvenv
 (use-package pyvenv
@@ -313,18 +300,8 @@
 
 (setq-default pyvenv-mode 1)
 
-
-;; (use-package python-mode
-;;   :ensure t
-;;   :custom
-;;   (python-shell-interpreter "python3")
-;;   :hook (python-mode . lsp-deferred))
-
 ;; HTML indentation
 (setq-default sgml-basic-offset 4)
-
-(use-package jinja2-mode
-  :ensure t)
 
 ;; C indentation
 (setq-default c-basic-offset 4)
@@ -411,9 +388,6 @@
 (global-set-key (kbd "C-c u") 'duplicate-current-line) ;; duplicate-line
 (global-set-key (kbd "C-c d") 'kill-whole-line) ;; kill-line
 (global-set-key (kbd "M-DEL") 'delete-backward-word) ;; delete-backward-word
-;; Navigation
-(global-set-key (kbd "C-c f r") 'lsp-find-references)
-(global-set-key (kbd "C-c f d") 'lsp-find-definition)
 ;; Swap forward and backward functions
 (global-set-key (kbd "C-f") 'forward-word)
 (global-set-key (kbd "M-f") 'forward-char)
@@ -424,7 +398,10 @@
 (global-set-key (kbd "M-s-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "M-s-<down>") 'shrink-window)
 (global-set-key (kbd "M-s-<up>") 'enlarge-window)
-
+;; Navigation
+(global-set-key (kbd "C-c f r") #'xref-find-references)
+(global-set-key (kbd "C-c f d") #'xref-find-definitions)
+(global-set-key (kbd "s-i") #'eldoc-box-help-at-point)
 
 ;; Ensure last execution
 (defvar hl-line-face)

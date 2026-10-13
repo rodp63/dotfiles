@@ -61,6 +61,9 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 
+# Go configuration
+export PATH="$PATH:$(go env GOPATH)/bin"
+
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
@@ -74,6 +77,7 @@ plugins=(
     you-should-use
     zsh-bat
     aliases
+    golang
 )
 
 source $ZSH/oh-my-zsh.sh
