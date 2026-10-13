@@ -3,21 +3,23 @@
 ;;; Code:
 
 
-;; Repositories
-(setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
-			 ("melpa" . "https://melpa.org/packages/")
-			 ("gnu" . "http://elpa.gnu.org/packages/")))
+;; Package repositories
+(require 'package)
+
+(setq package-archives
+      '(("gnu" . "https://elpa.gnu.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")
+        ("melpa-stable" . "https://stable.melpa.org/packages/")))
+
 (package-initialize)
 
 ;; Use-package
 (unless (package-installed-p 'use-package)
+  (package-refresh-contents)
   (package-install 'use-package))
 
-(eval-when-compile
-  (require 'use-package))
-
+(require 'use-package)
 (setq use-package-always-ensure t)
-
 
 ;; ==============================================================
 ;; ========================= Appearance =========================
@@ -61,7 +63,6 @@
 ;; Doom
 (use-package doom-modeline
   :ensure t
-  :functions doom-modeline-mode
   :init (doom-modeline-mode t)
   :custom (doom-modeline-height 30))
 
@@ -74,7 +75,14 @@
 (load-theme 'doom-tomorrow-night t)
 
 ;; Vertical lines
-(use-package highlight-indentation)
+(use-package indent-bars
+  :ensure t
+  :hook (prog-mode . indent-bars-mode))
+  ;; :custom
+  ;; (indent-bars-no-descend-lists 'skip)
+  ;; (indent-bars-treesit-support t)
+  ;; (indent-bars-treesit-ignore-blank-lines-types '("module"))
+  ;; (indent-bars-color '(highlight :face-bg t :blend 0.5)))
 
 ;; Better parem mode (after theme)
 (set-face-attribute 'show-paren-match nil :background "yellow" :foreground "black")
@@ -129,14 +137,13 @@
 ;; Company autocomplete
 (use-package company
   :ensure t
-  :functions global-company-mode
-  :config
-  (setq-default company-idle-delay 0
-		company-minimum-prefix-length 1
-		company-show-quick-access t
-		company-tooltip-limit 10
-		company-tooltip-align-annotations t)
-  (global-company-mode t))
+  :hook (after-init . global-company-mode)
+  :custom
+  (company-idle-delay 0.2)
+  (company-minimum-prefix-length 1)
+  (company-show-quick-access t)
+  (company-tooltip-limit 10)
+  (company-tooltip-align-annotations t))
 
 ;; Font packages
 (use-package nerd-icons) ;; M-x nerd-icons-install-fonts
@@ -294,11 +301,10 @@
 ;; pyvenv
 (use-package pyvenv
   :ensure t
+  :hook (python-ts-mode . pyvenv-mode)
   :config
   (setq-default pyvenv-mode-line-indicator
-		'(pyvenv-virtual-env-name ("[venv] "))))
-
-(setq-default pyvenv-mode 1)
+		'(pyvenv-virtual-env-name (" [venv] "))))
 
 ;; HTML indentation
 (setq-default sgml-basic-offset 4)
@@ -399,8 +405,6 @@
 (global-set-key (kbd "M-s-<down>") 'shrink-window)
 (global-set-key (kbd "M-s-<up>") 'enlarge-window)
 ;; Navigation
-(global-set-key (kbd "C-c f r") #'xref-find-references)
-(global-set-key (kbd "C-c f d") #'xref-find-definitions)
 (global-set-key (kbd "s-i") #'eldoc-box-help-at-point)
 
 ;; Ensure last execution
