@@ -201,7 +201,7 @@
   :custom-face
   (eldoc-box-body
    ((t (:family "Helvetica Neue"
-        :height 1.1
+        :height 1.05
         :background "#282c34"
         :foreground "#bbc2cf"))))
   (eldoc-box-border
@@ -306,12 +306,17 @@
   (setq-default pyvenv-mode-line-indicator
 		'(pyvenv-virtual-env-name (" [venv] "))))
 
+;; Tab indentation
+(setq-default tab-width 4)
+
 ;; HTML indentation
 (setq-default sgml-basic-offset 4)
 
 ;; C indentation
 (setq-default c-basic-offset 4)
 
+;; Go indentation
+(setq-default go-ts-mode-indent-offset 4)
 
 ;; =================================================================
 ;; ========================= Customization =========================
