@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+;; ==============================================================
+;; ========================== Packages ==========================
+;; ==============================================================
 
 ;; Package repositories
 (require 'package)
@@ -58,11 +61,10 @@
 ;; (setq scroll-preserve-screen-position 'always)
 
 ;; Don't accelerate scrolling
-(setq mouse-wheel-progressive-speed nil)
+(setq-default mouse-wheel-progressive-speed nil)
 
 ;; Doom
 (use-package doom-modeline
-  :ensure t
   :init (doom-modeline-mode t)
   :custom (doom-modeline-height 30))
 
@@ -74,26 +76,15 @@
 ;; (load-theme 'doom-palenight t)
 (load-theme 'doom-tomorrow-night t)
 
-;; Vertical lines
-(use-package indent-bars
-  :ensure t
-  :hook (prog-mode . indent-bars-mode))
-  ;; :custom
-  ;; (indent-bars-no-descend-lists 'skip)
-  ;; (indent-bars-treesit-support t)
-  ;; (indent-bars-treesit-ignore-blank-lines-types '("module"))
-  ;; (indent-bars-color '(highlight :face-bg t :blend 0.5)))
-
 ;; Better parem mode (after theme)
 (set-face-attribute 'show-paren-match nil :background "yellow" :foreground "black")
 
 ;; Nyan bar
 (use-package nyan-mode
-  :functions nyan-mode
   :config
-  (setq-default nyan-animate-nyancat t
-		nyan-wavy-trail t
-		nyan-bar-length 24)
+  (setq nyan-animate-nyancat t
+        nyan-wavy-trail t
+        nyan-bar-length 24)
   (nyan-mode t))
 
 ;; ===================================================================
@@ -103,43 +94,28 @@
 ;; Ag
 (use-package ag
   :config
-  (setq-default ag-highlight-search t)
-  (setq-default ag-reuse-buffers 't))
-
-;; Setup evil
-(use-package evil
-  :functions evil-mode
-  :config
-  (evil-mode t)
-  (setq-default evil-default-state 'emacs))
+  (setq ag-highlight-search t
+        ag-reuse-buffers t))
 
 ;; Treemacs
 (use-package treemacs
-  :ensure t
   :defer t
-  :functions (treemacs-follow-mode)
   :bind
   ("C-x p" . treemacs-add-and-display-current-project-exclusively)
   :config
-  (treemacs-follow-mode -1))
+  (treemacs-follow-mode t))
 
 ;; Dired icons
 (use-package treemacs-icons-dired
-  :ensure t
-  :functions treemacs-icons-dired-mode
   :config
   (treemacs-icons-dired-mode)
-  (setq-default treemacs-width 30))
-
-;; Ignore case in completion
-(setq completion-ignore-case t)
+  (setq treemacs-width 30))
 
 ;; Company autocomplete
 (use-package company
-  :ensure t
   :hook (after-init . global-company-mode)
   :custom
-  (company-idle-delay 0.2)
+  (company-idle-delay 0.1)
   (company-minimum-prefix-length 1)
   (company-show-quick-access t)
   (company-tooltip-limit 10)
@@ -151,39 +127,32 @@
 
 ;; All the icons modes
 (use-package all-the-icons-completion
-  :ensure t
-  :functions all-the-icons-completion-mode
   :init(all-the-icons-completion-mode))
 
 (use-package all-the-icons-ibuffer
-  :ensure t
   :hook (ibuffer-mode . all-the-icons-ibuffer-mode))
 
 ;; Swiper
 (use-package swiper
-  :ensure t
   :bind (("C-s" . swiper)))
 
 ;; Drag stuff
 (use-package drag-stuff
-  :functions (drag-stuff-global-mode
-	      drag-stuff-define-keys)
   :init
   (drag-stuff-global-mode t)
   :config
   (drag-stuff-define-keys))
 
-;; Colorful delimiters (for elisp only)
+;; Colorful delimiters
 (use-package rainbow-delimiters
-  :hook (emacs-lisp-mode . rainbow-delimiters-mode))
+  :hook (prog-mode . rainbow-delimiters-mode))
 
 ;; Which key
 (use-package which-key
-  :functions which-key-mode
   :init (which-key-mode)
   :diminish which-key-mode
   :config
-  (setq-default which-key-idle-delay 1))
+  (setq which-key-idle-delay 1))
 
 ;; Help
 (use-package helpful
@@ -197,79 +166,62 @@
 
 ;; Doc helpers
 (use-package eldoc-box
-  :ensure t
   :custom-face
   (eldoc-box-body
    ((t (:family "Helvetica Neue"
-        :height 1.05
-        :background "#282c34"
-        :foreground "#bbc2cf"))))
+                :height 1.05
+                :background "#282c34"
+                :foreground "#bbc2cf"))))
   (eldoc-box-border
    ((t (:background "#61afef")))))
 ;; :hook (eglot-managed-mode . eldoc-box-hover-mode))
 
 ;; Major mode CSV
 (use-package csv-mode
-  :ensure t
-  :functions (csv-header-line)
   :hook((csv-mode . csv-header-line)
-	(csv-mode . csv-align-mode)))
+        (csv-mode . csv-align-mode)))
 
 ;; Major mode ipython
-(use-package ein
-  :ensure t)
+(use-package ein)
 
 ;; Major mode YAML
-(use-package yaml-mode
-  :ensure t)
+(use-package yaml-mode)
 
 ;; Major mode Dockerfile
-(use-package dockerfile-mode
-  :ensure t)
+(use-package dockerfile-mode)
 
 ;; Major mode for git files
-(use-package git-modes
-  :ensure t)
+(use-package git-modes)
 
 ;; Major mode for crontab
-(use-package crontab-mode
-  :ensure t)
+(use-package crontab-mode)
 
 ;; Major mode for pip-requiriments
-(use-package pip-requirements
-  :ensure t)
+(use-package pip-requirements)
 
 ;; Major mode for dotenv files
-(use-package dotenv-mode
-  :ensure t)
+(use-package dotenv-mode)
 
 ;; Major mode for JS
-(use-package typescript-mode
-  :ensure t)
+(use-package typescript-mode)
 
 ;; Major mode for Hashicorp (packer)
-(use-package hcl-mode
-  :ensure t)
+(use-package hcl-mode)
 
 ;; Major mode for Terraform
-(use-package terraform-mode
-  :ensure t)
+(use-package terraform-mode)
 
 ;; Major mode for systemd units
-(use-package systemd
-  :ensure t)
+(use-package systemd)
 
 ;; Major go mode
-(use-package go-mode
-  :ensure t)
+(use-package go-mode)
 
 ;; Markdown mode
-(use-package markdown-mode
-  :ensure t)
+(use-package markdown-mode)
 
 ;; Jinja 2 mode
-(use-package jinja2-mode
-  :ensure t)
+(use-package jinja2-mode)
 
 ;; Games
 (use-package 2048-game)
@@ -282,12 +234,20 @@
 ;; Install them with: M-x treesit-install-language-grammar <lang>
 (dolist (grammar
          '((python "https://github.com/tree-sitter/tree-sitter-python")
-           (go "https://github.com/tree-sitter/tree-sitter-go")))
+           ;; Pin go to v0.23.4: v0.25.0 added a `statement_list` node that
+           ;; Emacs go-ts-mode indent rules don't handle yet, which breaks TAB.
+           (go "https://github.com/tree-sitter/tree-sitter-go" "v0.23.4")))
   (add-to-list 'treesit-language-source-alist grammar))
 
 ;; Prefer Tree-sitter modes over their traditional counterparts
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 (add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode))
+
+;; Setup exec path from shell
+(use-package exec-path-from-shell
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
 
 ;; eglot
 (use-package eglot
@@ -300,23 +260,25 @@
 
 ;; pyvenv
 (use-package pyvenv
-  :ensure t
   :hook (python-ts-mode . pyvenv-mode)
   :config
-  (setq-default pyvenv-mode-line-indicator
-		'(pyvenv-virtual-env-name (" [venv] "))))
+  (setq pyvenv-mode-line-indicator
+        '(pyvenv-virtual-env-name (" [venv] "))))
+
+;; Ignore case in completion
+(setq-default completion-ignore-case t)
 
 ;; Tab indentation
 (setq-default tab-width 4)
 
 ;; HTML indentation
-(setq-default sgml-basic-offset 4)
+(setq sgml-basic-offset 4)
 
 ;; C indentation
-(setq-default c-basic-offset 4)
+(setq c-basic-offset 4)
 
 ;; Go indentation
-(setq-default go-ts-mode-indent-offset 4)
+(setq go-ts-mode-indent-offset 4)
 
 ;; =================================================================
 ;; ========================= Customization =========================
@@ -331,8 +293,8 @@
                 prog-mode-hook
                 conf-mode-hook))
   (add-hook mode (lambda ()
-		   (display-line-numbers-mode 1)
-		   (electric-pair-mode 1))))
+                   (display-line-numbers-mode 1)
+                   (electric-pair-mode 1))))
 
 ;; Load files in the same window
 (setq ns-pop-up-frames nil)
@@ -392,13 +354,13 @@
 ;; Keybindings
 
 ;; General
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit) ;; escape
-(global-set-key (kbd "s-r") 'revert-buffer) ;; revert-buffer
-(global-set-key (kbd "C-c w") 'select-current-word) ;; select-word
-(global-set-key (kbd "C-c l") 'select-current-line) ;; select-line
-(global-set-key (kbd "C-c u") 'duplicate-current-line) ;; duplicate-line
-(global-set-key (kbd "C-c d") 'kill-whole-line) ;; kill-line
-(global-set-key (kbd "M-DEL") 'delete-backward-word) ;; delete-backward-word
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(global-set-key (kbd "s-r") 'revert-buffer)
+(global-set-key (kbd "C-c w") 'select-current-word)
+(global-set-key (kbd "C-c l") 'select-current-line)
+(global-set-key (kbd "C-c u") 'duplicate-current-line)
+(global-set-key (kbd "C-c d") 'kill-whole-line)
+(global-set-key (kbd "M-DEL") 'delete-backward-word)
 ;; Swap forward and backward functions
 (global-set-key (kbd "C-f") 'forward-word)
 (global-set-key (kbd "M-f") 'forward-char)
@@ -418,9 +380,9 @@
 
 ;; Profile emacs startup
 (add-hook 'emacs-startup-hook
-	  (lambda ()
-	    (message "*** Emacs loaded in %s seconds with %d garbage collections."
-		     (emacs-init-time "%.2f")
-		     gcs-done)))
+          (lambda ()
+            (message "*** Emacs loaded in %s seconds with %d garbage collections."
+                     (emacs-init-time "%.2f")
+                     gcs-done)))
 
 ;;; .emacs ends here
