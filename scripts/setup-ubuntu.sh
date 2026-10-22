@@ -23,16 +23,27 @@ echo "Installing system packages..."
 sudo DEBIAN_FRONTEND=noninteractive apt install -y \
     git \
     gh \
-	emacs \
+    emacs \
     vim \
     gcc \
     npm \
     curl \
     zsh \
     golang-go \
+    make \
+    bat \
+
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    build-essential \
     zlib1g-dev \
-	make \
-	bat
+    libffi-dev \
+    libssl-dev \
+    libbz2-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    liblzma-dev \
+    libncurses-dev \
+    tk-dev
 
 echo "Installing LSP..."
 sudo npm install --global pyright
