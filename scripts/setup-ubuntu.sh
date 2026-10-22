@@ -16,11 +16,11 @@ if ! command -v sudo >/dev/null 2>&1; then
 fi
 
 echo "Updating package lists..."
-sudo DEBIAN_FRONTEND=noninteractive apt update
-sudo DEBIAN_FRONTEND=noninteractive apt upgrade -y
+sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt-get update
+sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt-get -y upgrade --with-new-pkgs
 
 echo "Installing system packages..."
-sudo DEBIAN_FRONTEND=noninteractive apt install -y \
+sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt-get -y install \
     git \
     gh \
     emacs \
@@ -31,9 +31,9 @@ sudo DEBIAN_FRONTEND=noninteractive apt install -y \
     zsh \
     golang-go \
     make \
-    bat \
+    bat
 
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt-get -y install \
     build-essential \
     zlib1g-dev \
     libffi-dev \
