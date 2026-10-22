@@ -110,7 +110,9 @@ EDITOR="vim"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias aliases="als"
 alias time="/usr/bin/time"
-alias emacs="open -a Emacs"
+if [[ "$OSTYPE" == darwin* ]]; then
+    alias emacs="open -a Emacs"
+fi
 alias qdbtar="tar --zstd -xvf"
 alias yd="ydiff -u"
 alias dsclean="find . -type f -name \"*.DS_Store\" -delete"
